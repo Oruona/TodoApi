@@ -1,0 +1,31 @@
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    // This registers the Swagger JSON endpoint
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TodoApi v1");
+
+    // This makes Swagger UI available at http://localhost:8080/
+    c.RoutePrefix = "swagger";
+});
+
+
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
