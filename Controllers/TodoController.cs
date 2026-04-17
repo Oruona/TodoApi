@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TodoApi.Models;
+using System.Linq;
 
 namespace TodoApi.Controllers
 {
@@ -7,7 +8,7 @@ namespace TodoApi.Controllers
     [Route("api/[controller]")]
     public class TodoController : ControllerBase
     {
-        private  List<TodoItem> items = new();
+        private List<TodoItem> items = new();
 
         // GET: api/todo
         [HttpGet]
@@ -43,6 +44,24 @@ namespace TodoApi.Controllers
 
             items.Remove(item);
             return NoContent();
+        }
+
+        // NEW: Search todos
+        // GET: api/todo/search?query=keyword
+        [HttpGet("search")]
+        public IActionResult Search([FromQuery] string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return BadRequest("Search query cannot be empty.");
+
+            var results = items
+                .Where(i => i.Title.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (!results.Any())
+                return NotFound("No todos match your search.");
+
+            return Ok(results);
         }
     }
 }
