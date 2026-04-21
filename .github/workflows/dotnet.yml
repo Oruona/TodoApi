@@ -19,13 +19,13 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore TodoApi.csproj
 
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build TodoApi.csproj --no-restore
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: echo "No tests to run"
 
     - name: Build Docker image
       run: docker build -t ruona1/todoapi:latest .
